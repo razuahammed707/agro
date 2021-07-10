@@ -9,7 +9,10 @@ const transactionSchama = new Schema({
         enum:["fish","rice","animal"]
     },
     amount:Number,
-    type:String,
+    type:{
+        type:"String",
+        enum:["debit","credit"]
+    },
     buyerName:String,
     buyerPhone:String
 },{
