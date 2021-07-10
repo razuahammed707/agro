@@ -45,19 +45,53 @@ const getReports=async(req, res, next)=> {
             $group:{
                 _id:{
                     category:"$category",
-                    type:"$type"
+                    type:"$type",
                 },
                 total:{
-                    $sum: "$amount"
+                    $sum: "$amount",
                 }
             }
-        }]);
+        },{
+            $group:{
+                _id:"$_id.category",
+                total:{
+                    $addToSet:{"value":"$total","type":"$_id.type", 
+                }
+                },
 
+            }
+        },{
+            $project:{
+                category:"$_id.category",
+                total:"$total"
+                
+            }
+        }]);;
+
+        let finalOutput=[];
+
+        data.map(item=>{
+            let totalDebit=item.total.find(item=>item.type==="debit")
+            let totalCredit=item.total.find(item=>item.type==="credit");
+
+            let body={
+                "category":item._id,
+                "totalCredit":totalCredit.value,
+                "totalDebit":totalDebit.value,
+                "totlProfit": (totalCredit.value-totalDebit.value)
+            }
+            finalOutput.push(body)
+        })
+
+
+
+
+      
 
 
         res.send({
             status:true,
-            data:{data}
+            data:finalOutput
         })
 
     }catch(err){
