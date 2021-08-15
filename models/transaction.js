@@ -3,15 +3,15 @@ const Schema = mongoose.Schema;
 
 
 const transactionSchama = new Schema({
-    name:String,
+    title:String,
     category: {
         type:"String",
-        enum:["fish","rice","animal"]
+        enum:["fish","rice","animal","others"]
     },
     amount:Number,
     type:{
         type:"String",
-        enum:["debit","credit"]
+        enum:["inward","outward"]
     },
     buyerName:String,
     buyerPhone:String

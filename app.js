@@ -8,10 +8,14 @@ var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var transactionRouter = require("./routes/transaction")
 var app = express();
+const cors =require("cors");
+
 
 // DB Connection
 
 const mongoose =require("mongoose");
+
+app.use(cors())
 
 
 // view engine setup
@@ -33,12 +37,14 @@ app.use(function(req, res, next) {
   next(createError(404));
 });
 
-mongoose.connect("mongodb+srv://razu:munna707@now-tori.czeyd.mongodb.net/myFirstDatabase?authSource=admin&replicaSet=now-tori-shard-0&w=majority&readPreference=primary&appname=MongoDB%20Compass&retryWrites=true&ssl=true",{ useUnifiedTopology: true,useNewUrlParser: true })
+mongoose.connect("mongodb+srv://razu:munna707@now-tori.czeyd.mongodb.net/agro",{ useUnifiedTopology: true,useNewUrlParser: true })
 .then((err,data)=>{
   if(err){
   }
   console.log("DB connected")
 })
+
+
 // error handler
 app.use(function(err, req, res, next) {
   // set locals, only providing error in development

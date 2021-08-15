@@ -7,7 +7,7 @@ const TransactionModel = require("../models/transaction")
 // Create Transaction
 const getAllTransactions =async(req, res, next)=> {
     try{
-        const transaction = await TransactionModel.find()
+        const transaction = await TransactionModel.find().sort({createdAt:-1})
         res.send({
             status:true,
             data:{transaction}
@@ -71,8 +71,8 @@ const getReports=async(req, res, next)=> {
         let finalOutput=[];
 
         data.map(item=>{
-            let totalDebit=item.total.find(item=>item.type==="debit")
-            let totalCredit=item.total.find(item=>item.type==="credit");
+            let totalDebit=item.total.find(item=>item.type==="outward")
+            let totalCredit=item.total.find(item=>item.type==="inward");
 
             let body={
                 "category":item._id,
@@ -85,16 +85,13 @@ const getReports=async(req, res, next)=> {
 
 
 
-
-      
-
-
         res.send({
             status:true,
             data:finalOutput
         })
 
     }catch(err){
+        console.log(err)
         res.send({
             status:false,
             message:err.message

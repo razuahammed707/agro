@@ -1,0 +1,11 @@
+.main-board {
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  height: 100vh;
+}
+.main-nav {
+}
+.main-dash {
+  overflow: scroll;
+  padding-bottom: 152px;
+}
