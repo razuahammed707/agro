@@ -11,6 +11,7 @@ import Modal from "../global/Modal";
 
 import axios from "axios";
 import {BASE_URL}from "../../util/constants"
+import moment from "moment"
 
 
 
@@ -56,7 +57,8 @@ function Transaction() {
             <p>{tranDetails.category}</p>
             <p>{tranDetails.amount}</p>
             <p>{tranDetails.type}</p>
-            <p>{tranDetails.createdAt}</p>
+            <p>{moment(tranDetails.createdAt).format("DD-MM-YYYY")}</p>
+
             <p>{tranDetails.buyerName}</p>
             <p>{tranDetails.buyerPhone}</p>
           </div>

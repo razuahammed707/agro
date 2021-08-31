@@ -5,35 +5,38 @@ import User from "../../components/user/User";
 import Land from "../../components/land/Land";
 
 import Navbar from "../../components/navigation/Navbar";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import { BrowserRouter as Router, Switch, Route, Redirect } from "react-router-dom";
 import "./main.css";
 import SignIn from "../../components/signin/SignIn";
 function Main() {
-  return (
-    <div className="main-board">
-      <Router>
-        <div className="main-nav">
-          <Navbar />
-        </div>
-        <div className="main-dash">
-          <Switch>
-            <Route path="/dashboard">
-              <Dashboard />
-            </Route>
-            <Route path="/transaction">
-              <Transaction />
-            </Route>
-            <Route path="/user">
-              <User />
-            </Route>
-            <Route path="/land">
-              <Land />
-            </Route>
-          </Switch>
-        </div>
-      </Router>
-    </div>
-  );
+
+  if(localStorage.getItem("agro_auth")==="true"){
+    return (
+      <div className="main-board">
+          <div className="main-nav">
+            <Navbar />
+          </div>
+          <div className="main-dash">
+              <Route path="/admin/dashboard">
+                <Dashboard />
+              </Route>
+              
+              <Route path="/admin/transaction">
+                <Transaction />
+              </Route>
+              <Route path="/admin/user">
+                <User />
+              </Route>
+              <Route path="/admin/land">
+                <Land />
+              </Route>
+          </div>
+      </div>
+    );
+  }else{
+    return(<Redirect to="/login"/>)
+  }
+  
 }
 
 export default Main;

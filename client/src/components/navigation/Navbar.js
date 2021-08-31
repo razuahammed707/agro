@@ -2,7 +2,8 @@ import React, { useState, useEffect } from "react";
 import { NavLink } from "react-router-dom";
 import "./navbar.css";
 import logo from "../../assets/logo.svg";
-import { MdDashboard, MdPayment } from "react-icons/md";
+import { MdDashboard, MdPayment, } from "react-icons/md";
+import{AiOutlineLogout} from "react-icons/ai"
 import { FaUserAlt } from "react-icons/fa";
 import { GiIsland } from "react-icons/gi";
 
@@ -17,7 +18,7 @@ function Navbar() {
           <ul className="nav-menu">
             <li>
               <div className="list1">
-                <NavLink to="/dashboard">
+                <NavLink to="/admin/dashboard">
                   <MdDashboard />
                   <span>Dashboard</span>
                 </NavLink>
@@ -25,7 +26,7 @@ function Navbar() {
             </li>
             <li>
               <div className="list1">
-                <NavLink to="/transaction">
+                <NavLink to="/admin/transaction">
                   <MdPayment />
                   <span>Transaction</span>
                 </NavLink>
@@ -33,7 +34,7 @@ function Navbar() {
             </li>
             <li>
               <div className="list1">
-                <NavLink to="/user">
+                <NavLink to="/admin/user">
                   <FaUserAlt />
                   <span>User</span>
                 </NavLink>
@@ -41,9 +42,20 @@ function Navbar() {
             </li>
             <li>
               <div className="list1">
-                <NavLink to="/land">
+                <NavLink to="/admin/land">
                   <GiIsland />
                   <span>Land</span>
+                </NavLink>
+              </div>
+            </li>
+
+            <li>
+              <div className="list1">
+                <NavLink to="/login" onClick={()=>{
+                  localStorage.setItem("agro_auth",false)
+                }}>
+                  <AiOutlineLogout />
+                  <span>Logout</span>
                 </NavLink>
               </div>
             </li>

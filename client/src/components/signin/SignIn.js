@@ -1,16 +1,39 @@
-import React from "react";
+import React,{useState} from "react";
 import "./signin.css";
 import { useForm } from "react-hook-form";
+import axios from "axios"
+import {BASE_URL}from "../../util/constants"
+import { useHistory } from "react-router";
+
 
 function SignIn() {
+
+  const [isLoading,setLoading]=useState(false)
+  let history = useHistory();
+
   const {
     register,
     formState: { errors },
     handleSubmit,
   } = useForm();
-  const onSubmit = (data, e) => {
-    console.log(data);
-    e.target.reset();
+  const onSubmit = async(data, e) => {
+    try{
+      setLoading(true)
+      const res = await axios.post(`${BASE_URL}/login`,data);
+      if(res.data.status===true){
+        localStorage.setItem("agro_auth",true)
+        localStorage.setItem("agro_role",res.data.role)
+        history.push("/admin/dashboard")
+      }
+      setLoading(false)
+
+
+    }catch(err){
+      console.log(err)
+      setLoading(false)
+      alert("Please enter valid Email or Password")
+  
+    }
   };
   console.log(errors);
   return (
@@ -29,7 +52,7 @@ function SignIn() {
                 <label>Email</label>
                 <input
                   type="text"
-                  {...register("Email", {
+                  {...register("email", {
                     required: true,
                     pattern: /^\S+@\S+$/i,
                   })}
@@ -42,7 +65,7 @@ function SignIn() {
                 <label>Password</label>
                 <input
                   type="Text"
-                  {...register("Password", {
+                  {...register("password", {
                     required: true,
                     maxLength: 16,
                     minLength: 6,
@@ -55,7 +78,7 @@ function SignIn() {
             </div>
 
             <div className="addsignin-submit">
-              <input type="submit" className="outline" value="Sign In" />
+              <input type="submit" className="outline" value={isLoading===true?"Loading":"Sign In"} />
             </div>
           </form>
         </div>

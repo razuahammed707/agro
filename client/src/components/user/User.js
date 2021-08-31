@@ -1,38 +1,56 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import "./user.css";
 
-import userData from "../../data/user.json";
 import Modal from "../global/Modal";
 import AddUser from "./AddUser";
-import Paginate from "../global/Paginate";
+import {BASE_URL}from "../../util/constants"
+import axios from "axios";
+import {AiFillDelete} from "react-icons/ai"
 
 function User() {
   const total = 18;
-  const [user, setUser] = useState(userData.slice(0, total));
+  
+  // const [user, setUser] = useState(userData.slice(0, total));
+  const [users, setUsers] = useState([]);
   const [pageNumber, setPageNumber] = useState(0);
+  const [isLoading,setLoading]=useState(true)
 
-  const userPerPage = 6;
-  const pageVisited = userPerPage * pageNumber;
-  const displayUserList = user
-    .slice(pageVisited, pageVisited + userPerPage)
-    .map((userDetails, index) => {
-      return (
-        <div key={index}>
-          <div className="userdetails">
-            <p>{userDetails.Name}</p>
-            <p>{userDetails.Email}</p>
-            <p>{userDetails.Password}</p>
-          </div>
-        </div>
-      );
-    });
-  const pageCount = Math.ceil(user.length / userPerPage);
-  const pageChange = ({ selected }) => {
-    setPageNumber(selected);
-  };
+  
+  const role=localStorage.getItem("agro_role")
+
+
+
+  const loadData=async()=>{
+    try{
+
+      setLoading(true)
+      const users = await axios.get(`${BASE_URL}/users`);
+      setUsers(users.data.data)
+      setLoading(false)
+
+
+    }catch(err){
+      console.log(err)
+      // alert("Something went wrong")
+    }
+  }
+
+  const handleDelete=async(id)=>{
+    const users = await axios.delete(`${BASE_URL}/users/${id}`);
+    loadData();
+  }
+
+  useEffect(()=>{
+    loadData()
+  },[])
+
 
   const [isopen, setIsopen] = useState(false);
+
+  if(isLoading){
+    return(<>Loading</>)
+  }else
 
   return (
     <div>
@@ -53,7 +71,7 @@ function User() {
 
           <div>
             <Modal trigger={isopen} setTrigger={setIsopen}>
-              <AddUser trigger={isopen} setTrigger={setIsopen} />
+              <AddUser trigger={isopen} setTrigger={setIsopen} loadData={loadData} />
             </Modal>
           </div>
         </div>
@@ -61,19 +79,23 @@ function User() {
           <p>Name</p>
           <p>Email</p>
           <p>Password</p>
+          <p>Action</p>
         </div>
-        {displayUserList}
-        <div className="pagination">
-          <div className="show-result">
-            <p>
-              Showing Result {pageVisited + 1} to {userPerPage + pageVisited} of{" "}
-              {total}
-            </p>
+       {users.map((item,key)=>{
+         return(  <div key={key}>
+          <div className="userdetails">
+            <p>{item.name}</p>
+            <p>{item.email}</p>
+            <p>{item.password}</p>
+            {role==="admin"?<p><AiFillDelete onClick={()=>{
+              handleDelete(item._id)
+            }}/></p>:"Delete not allowed"}
+            
+
           </div>
-          <div className="pageNumber">
-            <Paginate pageChange={pageChange} pageCount={pageCount} />
-          </div>
-        </div>
+        </div>)
+       })}
+   
       </div>
     </div>
   );

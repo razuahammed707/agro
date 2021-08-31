@@ -1,6 +1,9 @@
 import React from "react";
 import { useForm } from "react-hook-form";
 import "./AddUser.css";
+import axios from "axios"
+import {BASE_URL}from "../../util/constants"
+
 
 const AddUser = (props) => {
   const {
@@ -9,9 +12,19 @@ const AddUser = (props) => {
     handleSubmit,
     reset,
   } = useForm();
-  const onSubmit = (data, e) => {
-    console.log(data);
-    e.target.reset();
+  const onSubmit = async(data, e) => {
+
+   try{
+    const res = await axios.post(`${BASE_URL}/users`,data);
+    alert("Thank you, your user has been created")
+    
+    props.loadData() 
+   }catch(err){
+     alert(err.response.data.message)
+   }
+ 
+
+   
   };
   console.log(errors);
   return (
@@ -26,7 +39,7 @@ const AddUser = (props) => {
             <label>Name</label>
             <input
               type="text"
-              {...register("Name", {
+              {...register("name", {
                 required: true,
                 maxLength: 80,
               })}
@@ -43,7 +56,7 @@ const AddUser = (props) => {
             <label>Email</label>
             <input
               type="text"
-              {...register("Email", { required: true, pattern: /^\S+@\S+$/i })}
+              {...register("email", { required: true, pattern: /^\S+@\S+$/i })}
               placeholder="Enter a Email"
               className="outline"
               required
@@ -53,7 +66,7 @@ const AddUser = (props) => {
             <label>Password</label>
             <input
               type="Text"
-              {...register("Password", {
+              {...register("password", {
                 required: true,
                 maxLength: 16,
                 minLength: 6,

@@ -46,7 +46,7 @@ function Dashboard() {
                 <div className="t-cost t-card">
                   {" "}
                   <div className="t-img">
-                    <img src="taka1.png" alt="taka" />
+                    <img src="../taka1.png" alt="taka" />
                   </div>
                   <div className="t-info">
                     <h3>Total Cost</h3>
@@ -56,7 +56,7 @@ function Dashboard() {
                 <div className="t-revenue t-card">
                   {" "}
                   <div className="t-img">
-                    <img src="taka2.png" alt="taka" />
+                    <img src="../taka2.png" alt="taka" />
                   </div>
                   <div className="t-info">
                     <h3>Total Revenue</h3>
@@ -66,7 +66,7 @@ function Dashboard() {
                 <div className="t-profit t-card">
                   {" "}
                   <div className="t-img">
-                    <img src="taka3.png" alt="taka" />
+                    <img src="../taka3.png" alt="taka" />
                   </div>
                   <div className="t-info">
                     <h3>Total Profit</h3>

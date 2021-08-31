@@ -1,40 +1,57 @@
-import React, { useState } from "react";
-
+import React, { useState,useEffect } from "react";
 import "./land.css";
-
-import landData from "../../data/land.json";
 import Modal from "../global/Modal";
 import AddLand from "./AddLand";
-import Paginate from "../global/Paginate";
+import {BASE_URL}from "../../util/constants"
+import axios from "axios";
+import {AiFillDelete} from "react-icons/ai"
+import moment from "moment"
+
 
 function Land() {
-  const total = 18;
-  const [land, setLand] = useState(landData.slice(0, total));
-  const [pageNumber, setPageNumber] = useState(0);
 
-  const landPerPage = 6;
-  const pageVisited = landPerPage * pageNumber;
-  const displayLandList = land
-    .slice(pageVisited, pageVisited + landPerPage)
-    .map((landDetails, index) => {
-      return (
-        <div key={index}>
-          <div className="landDetails">
-            <p>{landDetails.name}</p>
-            <p>{landDetails.quantity}</p>
-            <p>{landDetails.amount}</p>
-            <p>{landDetails.start}</p>
-            <p>{landDetails.due}</p>
-          </div>
-        </div>
-      );
-    });
-  const pageCount = Math.ceil(land.length / landPerPage);
-  const pageChange = ({ selected }) => {
-    setPageNumber(selected);
-  };
+  const [lands, setLands] = useState([]);
+  const [pageNumber, setPageNumber] = useState(0);
+  const [isLoading,setLoading]=useState(true)
+
+  const role=localStorage.getItem("agro_role")
+
+
+  const loadData=async()=>{
+    try{
+
+      setLoading(true)
+      const users = await axios.get(`${BASE_URL}/lands`);
+      setLands(users.data.data)
+      setLoading(false)
+
+
+    }catch(err){
+      console.log(err)
+      // alert("Something went wrong")
+    }
+  }
+
+  const handleDelete=async(id)=>{
+    const users = await axios.delete(`${BASE_URL}/lands/${id}`);
+    loadData();
+  }
+
+  useEffect(()=>{
+    loadData()
+  },[])
 
   const [isopen, setIsopen] = useState(false);
+
+
+  if(isLoading){
+    return(<>Loading</>)
+  }else
+
+
+
+      
+
 
   return (
     <div>
@@ -55,7 +72,7 @@ function Land() {
 
           <div>
             <Modal trigger={isopen} setTrigger={setIsopen}>
-              <AddLand trigger={isopen} setTrigger={setIsopen} />
+              <AddLand trigger={isopen} setTrigger={setIsopen} loadData={loadData} />
             </Modal>
           </div>
         </div>
@@ -65,19 +82,29 @@ function Land() {
           <p>Amount</p>
           <p>Start date</p>
           <p>Due Date</p>
+          <p>Action</p>
         </div>
-        {displayLandList}
-        <div className="pagination">
-          <div className="show-result">
-            <p>
-              Showing Result {pageVisited + 1} to {landPerPage + pageVisited} of{" "}
-              {total}
-            </p>
-          </div>
-          <div className="pageNumber">
-            <Paginate pageChange={pageChange} pageCount={pageCount} />
-          </div>
-        </div>
+        {lands.map((item,key)=>{
+          return (
+            <div key={key}>
+              <div className="landDetails">
+                <p>{item.name}</p>
+                <p>{item.quantity}</p>
+                <p>{item.amount}</p>
+                <p>{moment(item.startTime).format("DD-MM-YYYY")}</p>
+                <p>{moment(item.endDate).format("DD-MM-YYYY")}</p>
+                {role==="admin"?<p><AiFillDelete onClick={()=>{
+              handleDelete(item._id)
+            }}/></p>:"Delete not allowed"}
+
+
+  
+              </div>
+            </div>
+          );
+        })}
+        
+       
       </div>
     </div>
   );
