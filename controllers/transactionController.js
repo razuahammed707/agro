@@ -70,10 +70,24 @@ const getReports=async(req, res, next)=> {
 
         let finalOutput=[];
 
-        data.map(item=>{
+        for(let item of data){
+            console.log(item)
             let totalDebit=item.total.find(item=>item.type==="outward")
             let totalCredit=item.total.find(item=>item.type==="inward");
 
+            console.log(totalDebit,totalCredit)
+
+            if(totalCredit===undefined){
+                totalCredit={
+                    value:0
+                }
+            }
+            if(totalDebit===undefined){
+                totalDebit={
+                    value:0
+                }
+            }
+           
             let body={
                 "category":item._id,
                 "totalCredit":totalCredit.value,
@@ -81,7 +95,9 @@ const getReports=async(req, res, next)=> {
                 "totlProfit": (totalCredit.value-totalDebit.value)
             }
             finalOutput.push(body)
-        })
+        }
+
+      
 
 
 
