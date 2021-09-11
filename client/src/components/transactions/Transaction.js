@@ -99,27 +99,35 @@ function Transaction() {
           </Modal>
         </div>
       </div>
-      <div className="tran-title">
-        <p>Name</p>
-        <p>Category</p>
-        <p>Amount</p>
-        <p>Inward/Outward</p>
-        <p>Date</p>
-        <p>Buyer Name</p>
-        <p>Buyer Number</p>
-      </div>
-      {displayTranList}
-      <div className="pagination">
-        <div className="show-result">
-          <p>
-            Showing Result {pageVisited + 1} to{" "}
-            {transactionsPerPage + pageVisited} of {transactions.length+1}
-          </p>
+
+
+      <div className="tableData">
+        <div className="tran-title">
+          <p>Name</p>
+          <p>Category</p>
+          <p>Amount</p>
+          <p>Inward/Outward</p>
+          <p>Date</p>
+          <p>Buyer Name</p>
+          <p>Buyer Number</p>
         </div>
-        <div className="pageNumber">
-          <Paginate pageChange={pageChange} pageCount={pageCount} />
+        {displayTranList}
+        <div className="pagination">
+          <div className="show-result">
+            <p>
+              Showing Result {pageVisited + 1} to{" "}
+              {transactionsPerPage + pageVisited} of {transactions.length+1}
+            </p>
+          </div>
+         
         </div>
       </div>
+
+      <div className="pageNumber">
+            <Paginate pageChange={pageChange} pageCount={pageCount} />
+          </div>
+
+      
     </div>
   );
 }

@@ -83,3 +83,20 @@
   background: #ffff;
   cursor: pointer;
 }
+.tableData{
+  overflow: scroll;
+}
+
+@media screen and (max-width: 800px) {
+ .main-board{
+  grid-template-columns: 1fr !important;
+  }
+  .navigation{
+    display: none;
+  }
+
+  .tableData div{
+    width: 700px;
+  }
+  
+}
